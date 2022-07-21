@@ -1,3 +1,9 @@
+### Custom ###
+dev/
+data/test/
+test.py
+test.ipynb
+
 ### Data ###
 *.csv
 *.dat
