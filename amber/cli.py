@@ -22,6 +22,7 @@ def cli():
     net_id = f"{n_files + 1:04}-{ns.epochs:04}-{ns.batch_size:04}"
     train_ds, test_ds, val_ds = amber.load_carer(ns.batch_size)
 
+    print(f"\nNow training {net_id}...")
     start = dt.datetime.utcnow()
     net, history = amber.train(ns.epochs, net_id, train_ds=train_ds, val_ds=val_ds)
 
