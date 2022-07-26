@@ -1,17 +1,7 @@
 from math import dist
 
-import matplotlib.pyplot as plt
 import numpy as np
-import seaborn as sns
-
-sns.set_style("darkgrid")
-
-# ANGER:    (-.51,  .59,  .25)
-# FEAR:     (-.64,  .60, -.43)
-# JOY:      ( .76,  .48,  .35)
-# LOVE:     ( .82,  .65, -.05)
-# SADNESS:  (-.63, -.27, -.33)
-# SURPRISE: ( .40,  .67, -.13)
+import tensorflow as tf
 
 points = np.array(
     [
@@ -26,45 +16,30 @@ points = np.array(
 max_d = max([dist(p, q) for p in points for q in points])
 
 
-def deca(preds):
-    progress = np.empty((len(preds), 3))
+class DECKS(tf.keras.layers.Layer):
+    def call(self, inputs):
+        x = tf.numpy_function(self.contextualise, [inputs], tf.double)
+        return x
 
-    def get_midpoint(pred):
-        return np.sum(points * pred[:, None], axis=0) / np.sum(pred)
+    @staticmethod
+    def _get_weighted_midpoint(x):
+        return np.sum(points * x[:, None], axis=0) / np.sum(x)
 
-    def shift(a, b):
-        dist = a - b
-        move = dist * .2
-        return a - move
+    @staticmethod
+    def _shift(a, b):
+        return a - ((a - b) * .2)
 
-    dp = get_midpoint(preds[0])
-    progress[0] = dp
+    def contextualise(self, x):
+        outputs = np.zeros((len(x), len(points)))
 
-    for i, pred in enumerate(preds[1:], start=1):
-        mp = get_midpoint(pred)
-        dp = shift(dp, mp)
-        progress[i] = dp
+        for i, pred in enumerate(x):
+            if i == 0:
+                dynamic = self._get_weighted_midpoint(x[0])
+            else:
+                wmp = self._get_weighted_midpoint(pred)
+                dynamic = self._shift(dynamic, wmp)
 
-    norm_d = np.array([dist(dp, p) for p in points]) / max_d
-    return 1 - norm_d, progress
+            norm_d = np.array([dist(dynamic, p) for p in points]) / max_d
+            outputs[i] = 1 - norm_d
 
-
-if __name__ == "__main__":
-    preds = np.array(
-        [[0.9, 0.05, 0.0, 0.0, 0.05, 0.0],
-         [0.0, 0.0 , 0.8, 0.2, 0.0 , 0.0],
-         [0.0, 0.0 , 0.8, 0.2, 0.0 , 0.0],
-         [0.0, 0.0 , 0.8, 0.2, 0.0 , 0.0],
-         [0.0, 0.0 , 0.8, 0.2, 0.0 , 0.0]]
-    )
-
-    confidence, progress = deca(preds)
-    print(confidence)
-
-    fig = plt.figure(figsize=(10, 10))
-    plt.xlim(-1, 1)
-    plt.ylim(-1, 1)
-    sns.scatterplot(x=points[:, 0], y=points[:, 1])
-    sns.lineplot(x=progress[:, 0], y=progress[:, 1])
-    sns.scatterplot(x=[progress[-1][0]], y=[progress[-1][1]])
-    fig.savefig("test.png")
+        return outputs
