@@ -1,5 +1,5 @@
 import tensorflow as tf
-from amber.nets.utils import text_encoder
+from decks.nets.utils import text_encoder
 
 
 def build_net(ds):
