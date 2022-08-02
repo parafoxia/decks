@@ -2,6 +2,7 @@ import argparse
 import json
 import os
 import datetime as dt
+import tensorflow as tf
 
 import decks
 
@@ -13,6 +14,7 @@ def cli():
     parser = argparse.ArgumentParser()
     parser.add_argument("-e", "--epochs", help="The number of epochs to train for.", type=int)
     parser.add_argument("-b", "--batch-size", help="The batch size to use.", type=int, default=64)
+    parser.add_argument("--gpu", help="Use the GPU(s) instead of the CPU", action="store_true")
     ns = parser.parse_args()
 
     if ns.epochs % 10 != 0:
@@ -22,7 +24,7 @@ def cli():
     net_id = f"{n_files + 1:04}-{ns.epochs:04}-{ns.batch_size:04}"
     train_ds, test_ds, val_ds = decks.load_carer(ns.batch_size)
 
-    print(f"\nNow training {net_id}...")
+    print(f"\nNow training {net_id}... ({len(tf.config.list_physical_devices('GPU'))} GPUs available)")
     start = dt.datetime.utcnow()
     net, history = decks.train(ns.epochs, net_id, train_ds=train_ds, val_ds=val_ds)
 
