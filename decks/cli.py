@@ -12,16 +12,16 @@ def cli():
         os.makedirs(decks.DATA_DIR / "history")
 
     parser = argparse.ArgumentParser()
+    parser.add_argument("generation", help="The model's generation.")
     parser.add_argument("-e", "--epochs", help="The number of epochs to train for.", type=int)
     parser.add_argument("-b", "--batch-size", help="The batch size to use.", type=int, default=64)
-    parser.add_argument("--gpu", help="Use the GPU(s) instead of the CPU", action="store_true")
     ns = parser.parse_args()
 
     if ns.epochs % 10 != 0:
         raise ValueError("the number of epochs must be a multiple of 10")
 
-    n_files = len(os.listdir(decks.DATA_DIR / "history"))
-    net_id = f"{n_files + 1:04}-{ns.epochs:04}-{ns.batch_size:04}"
+    # n_files = len(os.listdir(decks.DATA_DIR / "history"))
+    net_id = f"{ns.generation:04}-{ns.epochs:04}-{ns.batch_size:04}"
     train_ds, test_ds, val_ds = decks.load_carer(ns.batch_size)
 
     print(f"\nNow training {net_id}... ({len(tf.config.list_physical_devices('GPU'))} GPUs available)")
