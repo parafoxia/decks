@@ -21,7 +21,7 @@ def cli():
         raise ValueError("the number of epochs must be a multiple of 10")
 
     # n_files = len(os.listdir(decks.DATA_DIR / "history"))
-    net_id = f"{ns.generation:04}-{ns.epochs:04}-{ns.batch_size:04}"
+    net_id = f"{ns.generation:>04}-{ns.epochs:04}-{ns.batch_size:04}"
     train_ds, test_ds, val_ds = decks.load_carer(ns.batch_size)
 
     print(f"\nNow training {net_id}... ({len(tf.config.list_physical_devices('GPU'))} GPUs available)")
