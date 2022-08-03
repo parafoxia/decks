@@ -17,18 +17,22 @@ docker build -t decks .
 To train models:
 
 ```sh
-docker run --gpus all -it decks python -m decks <gen> -e <epochs> -b [batch size]
+docker run --gpus <devices> -it decks python -m decks <gen> -e <epochs> -b [batch_size]
 ```
 
-Run `python -m decks --help` for more information about command arguments.
+Arguments:
 
-## Distributed training
+- `devices` - A Docker flag for GPU devices. See below for more information.
+- `gen` - The model generation.
+- `epochs` - The number of epochs to train for.
+- `batch_size` (optional) - The size of data batches.
 
-To use distributed training:
+### Specifying devices
 
-```sh
-docker run --gpus all --ipc=host -it decks python -m decks <gen> -e <epochs> -b [batch size] -d
-```
+| Use case         | Command                 |
+| ---------------- | ----------------------- |
+| Only use GPU 0   | `--gpus '"device=0"'`   |
+| Use GPUs 1 and 3 | `--gpus '"device=1,3"'` |
+| Use all GPUs     | `--gpus all`            |
 
-Note that if `--ipc=host` is not passed, Tensorflow will error.
-Make sure this Docker flag is specified when passing the `-d` or `--distributed` flags.
+**Note:** If more than one GPU device is made available, distributed training is automatically enabled.

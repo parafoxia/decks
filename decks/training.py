@@ -8,6 +8,7 @@ def train(epochs, nid, n_gpus, *, train_ds, val_ds):
     cp_path = decks.DATA_DIR / f"checkpoints/{nid}" / "cp-{epoch:04d}.ckpt"
 
     if n_gpus >= 2:
+        print("Distributed training will be enabled")
         strategy = tf.distribute.MirroredStrategy()
         net = decks.build_dist_net(train_ds, strategy)
     else:
