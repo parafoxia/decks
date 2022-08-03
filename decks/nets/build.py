@@ -10,11 +10,11 @@ def build_net(ds):
             enc,
             tf.keras.layers.Embedding(
                 input_dim=len(enc.get_vocabulary()),
-                output_dim=64,
+                output_dim=32,
                 mask_zero=True,
             ),
-            tf.keras.layers.Bidirectional(tf.keras.layers.GRU(64)),
-            tf.keras.layers.Dense(64, activation="relu"),
+            tf.keras.layers.Bidirectional(tf.keras.layers.GRU(32)),
+            tf.keras.layers.Dense(32, activation="relu"),
             tf.keras.layers.Dense(6, activation="softmax"),
         ]
     )
