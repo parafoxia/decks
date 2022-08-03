@@ -17,7 +17,7 @@ docker build -t decks .
 To train models:
 
 ```sh
-docker run --gpus <devices> -it decks python -m decks <gen> -e <epochs> -b [batch_size]
+docker run --gpus <devices> --ipc=host -it decks python -m decks <gen> -e <epochs> -b [batch_size]
 ```
 
 Arguments:
@@ -26,6 +26,8 @@ Arguments:
 - `gen` - The model generation.
 - `epochs` - The number of epochs to train for.
 - `batch_size` (optional) - The size of data batches.
+
+**Note:** `ipc=host` can be omitted if only one GPU device is made available.
 
 ### Specifying devices
 
