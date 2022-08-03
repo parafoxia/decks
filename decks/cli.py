@@ -28,7 +28,7 @@ def cli():
     train_ds, test_ds, val_ds = decks.load_carer(ns.batch_size)
 
     net_id = f"{ns.generation:>04}-{ns.epochs:04}-{ns.batch_size:04}"
-    print(f"\nNow training {net_id}... ({n_gpus} GPUs available)")
+    print(f"\nNow training \33[1m{net_id}\33[0m... (GPUs available: \33[1m{n_gpus}\33[0m)")
     start = dt.datetime.utcnow()
     net, history = decks.train(
         ns.epochs,
