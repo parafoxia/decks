@@ -17,6 +17,7 @@ def cli():
     parser.add_argument("generation", help="The model's generation.")
     parser.add_argument("-e", "--epochs", help="The number of epochs to train for.", type=int)
     parser.add_argument("-b", "--batch-size", help="The batch size to use.", type=int, default=64)
+    parser.add_argument("-i", "--initial-epoch", help="The initial epoch to start training with.", type=int, default=0)
     ns = parser.parse_args()
 
     if ns.epochs % 10 != 0:
@@ -31,6 +32,7 @@ def cli():
     start = dt.datetime.utcnow()
     net, history = decks.train(
         ns.epochs,
+        ns.initial_epoch,
         net_id,
         n_gpus,
         train_ds=train_ds,
