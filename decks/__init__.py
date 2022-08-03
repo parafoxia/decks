@@ -1,3 +1,5 @@
+"""Dimensional Emotion-Contextualising Kinetic System"""
+
 __all__ = ("DATA_DIR", "cli", "DECKS", "DecksNet", "build_net", "train")
 
 from pathlib import Path
