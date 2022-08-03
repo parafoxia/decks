@@ -10,5 +10,5 @@ from . import cli
 from .context import DECKS
 from .data import *
 from .model import DecksNet
-from .nets import build_net, build_dist_net
+from .nets import build_dist_net, build_net
 from .training import train

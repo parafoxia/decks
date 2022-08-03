@@ -1,4 +1,5 @@
 import tensorflow as tf
+
 from decks.nets.utils import text_encoder
 
 
