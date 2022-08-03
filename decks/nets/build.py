@@ -13,11 +13,8 @@ def build_net(ds):
                 output_dim=64,
                 mask_zero=True,
             ),
-            tf.keras.layers.Dropout(0.8),
             tf.keras.layers.Bidirectional(tf.keras.layers.GRU(64)),
-            tf.keras.layers.Dropout(0.7),
             tf.keras.layers.Dense(64, activation="relu"),
-            tf.keras.layers.Dropout(0.6),
             tf.keras.layers.Dense(6, activation="softmax"),
         ]
     )
