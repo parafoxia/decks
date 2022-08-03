@@ -28,6 +28,8 @@ def build_net(ds):
     0006
     ----
 
+# Dropout layer (https://www.cs.toronto.edu/~hinton/absps/JMLRdropout.pdf, p. 1938)
+
 def build_net(ds):
     enc = text_encoder(ds, 2500)
     model = tf.keras.Sequential(
