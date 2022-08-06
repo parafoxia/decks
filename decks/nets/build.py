@@ -33,8 +33,8 @@ class Model(tf.keras.Model):
         self.encoder = text_encoder(ds, 2_500)
         self.embedding = tf.keras.layers.Embedding(input_dim=len(self.encoder.get_vocabulary()), output_dim=64, mask_zero=True)
 
-        self.b1 = tf.keras.layers.Bidirectional(tf.keras.layers.GRU(64), return_state=True, return_sequences=True)
-        self.b2 = tf.keras.layers.Bidirectional(tf.keras.layers.GRU(64), return_state=True, return_sequences=True)
+        self.b1 = tf.keras.layers.Bidirectional(tf.keras.layers.GRU(64, return_state=True, return_sequences=True))
+        self.b2 = tf.keras.layers.Bidirectional(tf.keras.layers.GRU(64, return_state=True, return_sequences=True))
         self.b3 = tf.keras.layers.Bidirectional(tf.keras.layers.GRU(64))
 
         self.d1 = tf.keras.layers.Dense(64, activation="relu")
