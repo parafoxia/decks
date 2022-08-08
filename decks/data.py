@@ -28,10 +28,11 @@ def _calculate_weights(labels):
         samples[i] = labels[col].value_counts()[1]
 
     weights = np.max(samples) / samples
+    weights = np.interp(weights, (weights.min(), weights.max()), (1, 20))
     return {i: w for i, w in enumerate(weights)}
 
 
-def load_goemotions(batch_size, *, balance=False):
+def load_goemotions(batch_size):
     df = pd.read_csv("goemotions.csv", index_col=0)
     train_df = df[df["split"] == 0]
     test_df = df[df["split"] == 1]
@@ -54,6 +55,6 @@ def load_goemotions(batch_size, *, balance=False):
 
 
 if __name__ == "__main__":
-    (train_ds, test_ds, val_ds), weights = load_goemotions(64, balance=True)
+    (train_ds, test_ds, val_ds), weights = load_goemotions(64)
     print(len(train_ds), len(test_ds), len(val_ds))
     print(weights)
