@@ -37,7 +37,7 @@ def cli():
         n_gpus,
         train_ds=train_ds,
         val_ds=val_ds,
-        weights=weights,
+        class_weights=weights,
     )
 
     with open(decks.DATA_DIR / f"history/{net_id}.json", "w") as f:
