@@ -59,7 +59,7 @@ def build_net(ds):
     model = Model(ds)
     model.compile(
         loss="binary_crossentropy",
-        optimizer=tf.keras.optimizers.Adam(1e-4),
+        optimizer=tf.keras.optimizers.Adam(1e-3),
         metrics=["accuracy"],
     )
     return model
