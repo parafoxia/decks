@@ -1,7 +1,6 @@
 import numpy as np
 import pandas as pd
 import tensorflow as tf
-from sklearn.neighbors import NearestNeighbors
 
 
 def load_carer(batch_size):
@@ -22,15 +21,14 @@ def load_carer(batch_size):
     return datasets
 
 
-def calculate_weights(labels):
-    samples = np.zeros(len(labels.columns) - 2)
+def _calculate_weights(labels):
+    samples = np.zeros(len(labels.columns))
 
-    for i, col in enumerate(labels.columns[2:]):
+    for i, col in enumerate(labels.columns):
         samples[i] = labels[col].value_counts()[1]
 
     weights = np.max(samples) / samples
     return {i: w for i, w in enumerate(weights)}
-
 
 
 def load_goemotions(batch_size, *, balance=False):
@@ -46,7 +44,7 @@ def load_goemotions(batch_size, *, balance=False):
         labels = df.iloc[:, 2:]
 
         if i == 0:
-            weights = calculate_weights(labels)
+            weights = _calculate_weights(labels)
 
         ds = tf.data.Dataset.from_tensor_slices((features.values, labels.values))
         ds = ds.batch(batch_size, drop_remainder=True).prefetch(tf.data.AUTOTUNE)
