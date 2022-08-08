@@ -16,7 +16,7 @@ points = np.array(
 max_d = max([dist(p, q) for p in points for q in points])
 
 
-class DECKS(tf.keras.layers.Layer):
+class Contextualiser(tf.keras.layers.Layer):
     def call(self, inputs):
         x = tf.numpy_function(self.contextualise, [inputs], tf.double)
         return x

@@ -16,7 +16,7 @@ class DecksNet(tf.keras.Model):
     def __init__(self):
         super().__init__()
         self.emo_net = _load_net("0002-0010-0512")
-        self.deca_layer = decks.DECKS()
+        self.deca_layer = decks.Contextualiser()
 
     def call(self, inputs):
         x = self.emo_net(inputs)
