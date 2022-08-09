@@ -37,6 +37,7 @@ def cli():
         n_gpus,
         train_ds=train_ds,
         val_ds=val_ds,
+        batch_size=ns.batch_size,
         class_weights=weights,
     )
 

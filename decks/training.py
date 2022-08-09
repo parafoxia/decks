@@ -5,15 +5,16 @@ import decks
 from decks.nets.utils import cp_callback
 
 
-def train(epochs, initial_epoch, nid, n_gpus, *, train_ds, val_ds, class_weights):
+def train(epochs, initial_epoch, nid, n_gpus, *, train_ds, val_ds, batch_size, class_weights):
     cp_path = decks.DATA_DIR / f"checkpoints/{nid}" / "cp-{epoch:04d}.ckpt"
+    n_samples = len(train_ds) * batch_size
 
     if n_gpus >= 2:
         print("Distributed training will be enabled")
         strategy = tf.distribute.MirroredStrategy()
-        net = decks.build_dist_net(train_ds, strategy)
+        net = decks.build_dist_net(train_ds, n_samples, strategy)
     else:
-        net = decks.build_net(train_ds)
+        net = decks.build_net(train_ds, n_samples)
 
     if initial_epoch > 0:
         parts = nid.split("-")

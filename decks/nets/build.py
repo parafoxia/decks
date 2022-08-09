@@ -26,46 +26,42 @@ from decks.nets.utils import text_encoder
 #     return model
 
 
-class Model(tf.keras.Model):
-    def __init__(self, ds):
-        super().__init__()
+def calculate_nodes_for(ds, N):
+    for _, l in ds.take(1):
+        l = l.numpy()
+        m = len(l[0]) if l.shape[1] > 1 else len(l)
 
-        self.encoder = text_encoder(ds, 2_500)
-        self.embedding = tf.keras.layers.Embedding(input_dim=len(self.encoder.get_vocabulary()), output_dim=64, mask_zero=True)
-
-        self.b1 = tf.keras.layers.Bidirectional(tf.keras.layers.GRU(64, return_state=True, return_sequences=True))
-        self.b2 = tf.keras.layers.Bidirectional(tf.keras.layers.GRU(64, return_state=True, return_sequences=True))
-        self.b3 = tf.keras.layers.Bidirectional(tf.keras.layers.GRU(64))
-
-        self.d1 = tf.keras.layers.Dense(64, activation="relu")
-        self.d2 = tf.keras.layers.Dense(64, activation="relu")
-        self.d3 = tf.keras.layers.Dense(64, activation="relu")
-
-        self.out = tf.keras.layers.Dense(28, activation="sigmoid")
-
-    def call(self, inputs):
-        x = self.encoder(inputs)
-        x = self.embedding(x)
-        x = self.b1(x)
-        x = self.b2(x)
-        x = self.b3(x)
-        x = self.d1(x)
-        x = self.d2(x)
-        x = self.d3(x)
-        return self.out(x)
+    p1 = ((m + 2) * N) ** 0.5
+    p2 = 2 * ((N / (m + 2)) ** 0.5)
+    p3 = m * ((N / (m + 2)) ** 0.5)
+    return round((p1 + p2) * .9), round(p3 * .9), m
 
 
-def build_net(ds):
-    model = Model(ds)
+def build_net(ds, n_samples):
+    hl1, hl2, outputs = calculate_nodes_for(ds, n_samples)
+    enc = text_encoder(ds, None)
+    model = tf.keras.Sequential(
+        [
+            enc,
+            tf.keras.layers.Embedding(
+                input_dim=len(enc.get_vocabulary()),
+                output_dim=hl1,
+                mask_zero=True,
+            ),
+            tf.keras.layers.Bidirectional(tf.keras.layers.GRU(hl1)),
+            tf.keras.layers.Dense(hl2, activation="relu"),
+            tf.keras.layers.Dense(outputs, activation="sigmoid"),
+        ]
+    )
     model.compile(
-        loss="binary_crossentropy",
-        optimizer=tf.keras.optimizers.Adam(1e-3),
+        loss="sparse_categorical_crossentropy",
+        optimizer=tf.keras.optimizers.Adam(1e-4),
         metrics=["accuracy"],
     )
     return model
 
 
-def build_dist_net(ds, strategy):
+def build_dist_net(ds, n_samples, strategy):
     with strategy.scope():
-        model = build_net(ds)
+        model = build_net(ds, n_samples)
     return model
