@@ -38,7 +38,7 @@ def cli():
         train_ds=train_ds,
         val_ds=val_ds,
         batch_size=ns.batch_size,
-        class_weights=weights,
+        class_weights=None,
     )
 
     with open(decks.DATA_DIR / f"history/{net_id}.json", "w") as f:
