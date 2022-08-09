@@ -1,3 +1,4 @@
+from pickletools import optimize
 import tensorflow as tf
 
 from decks.nets.utils import text_encoder
@@ -55,7 +56,8 @@ def build_net(ds, n_samples):
     )
     model.compile(
         loss="sparse_categorical_crossentropy",
-        optimizer=tf.keras.optimizers.Adam(1e-4),
+        # optimizer=tf.keras.optimizers.Adam(1e-4),
+        optimizer="adam",
         metrics=["accuracy"],
     )
     return model
