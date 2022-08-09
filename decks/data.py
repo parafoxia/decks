@@ -28,7 +28,7 @@ def _calculate_weights(labels):
         samples[i] = labels[col].value_counts()[1]
 
     weights = np.max(samples) / samples
-    weights = np.interp(weights, (weights.min(), weights.max()), (1, 20))
+    weights = np.interp(weights, (weights.min(), weights.max()), (1, 10))
     return {i: w for i, w in enumerate(weights)}
 
 
