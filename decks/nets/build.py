@@ -62,7 +62,7 @@ def build_net(ds):
 #     return model
 
 
-def build_dist_net(ds, n_samples, strategy):
+def build_dist_net(ds, strategy):
     with strategy.scope():
-        model = build_net(ds, n_samples)
+        model = build_net(ds)
     return model

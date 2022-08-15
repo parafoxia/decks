@@ -5,7 +5,7 @@ import decks
 from decks.nets.utils import cp_callback
 
 
-def train(epochs, initial_epoch, nid, n_gpus, *, train_ds, val_ds, batch_size, class_weights):
+def train(epochs, initial_epoch, nid, n_gpus, *, train_ds, val_ds, class_weights):
     cp_path = decks.DATA_DIR / f"checkpoints/{nid}" / "cp-{epoch:04d}.ckpt"
 
     if n_gpus >= 2:
