@@ -131,6 +131,44 @@ def build_net(ds):
     )
     return model
 
+    0012
+    ----
+
+def build_net(ds):
+    hl1, hl2 = calculate_nodes_for(ds, 6)
+    print(f"Using \33[1m{hl1}:{hl2}\33[0m for hidden node counts")
+
+    enc = text_encoder(ds, None)
+    model = tf.keras.Sequential(
+        [
+            enc,
+            tf.keras.layers.Embedding(
+                input_dim=len(enc.get_vocabulary()),
+                output_dim=hl1,
+                mask_zero=True,
+            ),
+            tf.keras.layers.Bidirectional(tf.keras.layers.GRU(hl1)),
+            tf.keras.layers.Dense(hl2, activation="relu"),
+            tf.keras.layers.Dense(6, activation="softmax"),
+        ]
+    )
+    model.compile(
+        loss="sparse_categorical_crossentropy",
+        optimizer=tf.keras.optimizers.Adam(1e-4),
+        metrics=["accuracy"],
+    )
+    return model
+
+    0013
+    ----
+
+    0012 + weights
+
+    0014
+    ----
+
+    0013 + learning rate = 2e-05
+
     1001
     ----
 
