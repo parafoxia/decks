@@ -18,7 +18,7 @@ def load_carer(batch_size):
         ds = ds.batch(batch_size, drop_remainder=True).prefetch(tf.data.AUTOTUNE)
         datasets.append(ds)
 
-    return datasets, {}
+    return datasets, None
 
 
 def _calculate_weights(labels):
