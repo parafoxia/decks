@@ -1,0 +1,53 @@
+```{r}
+library("scatterplot3d")
+library("wordcloud")
+```
+
+```{r}
+points.carer <- read.csv(file="./carer_points.csv")
+head(points.carer)
+```
+
+```{r}
+points.goemotions <- read.csv(file="./goemotions_points.csv")
+head(points.goemotions)
+```
+
+```{r}
+png(file="./carer.png", width=500, height=500)
+s3d <- scatterplot3d(points.carer[, 2:4],
+              main="Carer Emotions",
+              xlab="Valence",
+              ylab="Arousal",
+              zlab="Dominance",
+              pch=16,
+              color="steelblue",
+              type="h",
+              xlim=c(-1, 1),
+              ylim=c(-1, 1),
+              zlim=c(-1, 1))
+text(s3d$xyz.convert(points.carer[, 2:4]),
+     labels=points.carer[, 1],
+     cex=1.25,
+     pos=4)
+```
+
+```{r}
+png(file="./goemotions.png", width=500, height=500)
+s3d <- scatterplot3d(points.goemotions[, 2:4],
+              main="GoEmotions Emotions",
+              xlab="Valence",
+              ylab="Arousal",
+              zlab="Dominance",
+              pch=16,
+              color="steelblue",
+              type="h",
+              xlim=c(-1, 1),
+              ylim=c(-1, 1),
+              zlim=c(-1, 1))
+loc = s3d$xyz.convert(points.goemotions[, 2:4])
+text(s3d$xyz.convert(points.goemotions[, 2:4]),
+     labels=points.goemotions[, 1],
+     cex=1,
+     pos=4)
+```
