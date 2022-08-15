@@ -18,7 +18,7 @@ def load_carer(batch_size):
         ds = ds.batch(batch_size, drop_remainder=True).prefetch(tf.data.AUTOTUNE)
         datasets.append(ds)
 
-    return datasets
+    return datasets, {}
 
 
 def _calculate_weights(labels):
@@ -55,6 +55,6 @@ def load_goemotions(batch_size):
 
 
 if __name__ == "__main__":
-    (train_ds, test_ds, val_ds), weights = load_goemotions(64)
+    (train_ds, test_ds, val_ds), weights = load_carer(64)
     print(len(train_ds), len(test_ds), len(val_ds))
-    print(weights)
+    print(len(train_ds) * 64)
