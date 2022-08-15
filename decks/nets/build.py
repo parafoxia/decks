@@ -31,7 +31,7 @@ def build_net(ds):
     )
     model.compile(
         loss="sparse_categorical_crossentropy",
-        optimizer=tf.keras.optimizers.Adam(2e-5),
+        optimizer=tf.keras.optimizers.Adam(1e-4),
         metrics=["accuracy"],
     )
     return model
