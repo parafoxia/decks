@@ -1,3 +1,4 @@
+from pydoc import describe
 import tensorflow as tf
 
 import decks
@@ -5,7 +6,7 @@ from decks import data
 
 
 def _load_net(id):
-    train_ds, _, _ = data.load_carer(int(id.split("-")[-1]))
+    (train_ds, _, _), _ = data.load_carer(int(id.split("-")[-1]))
     net = decks.build_net(train_ds)
     weights = tf.train.latest_checkpoint(decks.DATA_DIR / f"checkpoints/{id}")
     net.load_weights(weights)
