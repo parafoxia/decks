@@ -22,24 +22,24 @@ class Contextualiser(tf.keras.layers.Layer):
         return x
 
     @staticmethod
-    def _get_weighted_midpoint(x):
-        return np.sum(points * x[:, None], axis=0) / np.sum(x)
+    def _get_weighted_midpoint(weights):
+        return np.sum(points * weights[:, None], axis=0) / np.sum(weights)
 
     @staticmethod
-    def _shift(a, b):
-        return a - ((a - b) * .2)
+    def _shift(tonal, wmp):
+        return tonal - ((tonal - wmp) * .2)
 
-    def contextualise(self, x):
-        outputs = np.zeros((len(x), len(points)))
+    def contextualise(self, weights):
+        outputs = np.zeros((len(weights), len(points)))
 
-        for i, pred in enumerate(x):
+        for i, w in enumerate(weights):
             if i == 0:
-                dynamic = self._get_weighted_midpoint(x[0])
+                tonal = self._get_weighted_midpoint(w)
             else:
-                wmp = self._get_weighted_midpoint(pred)
-                dynamic = self._shift(dynamic, wmp)
+                wmp = self._get_weighted_midpoint(w)
+                tonal = self._shift(tonal, wmp)
 
-            norm_d = np.array([dist(dynamic, p) for p in points]) / max_d
+            norm_d = np.array([dist(tonal, p) for p in points]) / max_d
             outputs[i] = 1 - norm_d
 
         return outputs
