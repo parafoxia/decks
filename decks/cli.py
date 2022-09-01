@@ -25,7 +25,7 @@ def cli():
 
     # Control the number of GPUs using the Docker flag.
     n_gpus = len(tf.config.list_physical_devices("GPU"))
-    (train_ds, test_ds, val_ds), weights = decks.load_carer(ns.batch_size)
+    train_ds, test_ds, val_ds = decks.load_carer(ns.batch_size)
 
     net_id = f"{ns.generation:>04}-{ns.epochs:04}-{ns.batch_size:04}"
     print(f"\nNow training \33[1m{net_id}\33[0m... (GPUs available: \33[1m{n_gpus}\33[0m)")
@@ -37,7 +37,7 @@ def cli():
         n_gpus,
         train_ds=train_ds,
         val_ds=val_ds,
-        class_weights=weights,
+        class_weights=None,
     )
 
     with open(decks.DATA_DIR / f"history/{net_id}.json", "w") as f:

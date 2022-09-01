@@ -16,24 +16,18 @@ def _calculate_weights_carer(labels):
 
 def load_carer(batch_size):
     df = pd.read_csv("carer.csv", index_col=0)
-    train_df = df[df["split"] == 0]
-    test_df = df[df["split"] == 1]
-    val_df = df[df["split"] == 2]
-
     datasets = []
 
-    for i, df in enumerate((train_df, test_df, val_df)):
-        features = df.iloc[:, 0]
-        labels = df.iloc[:, 1]
-
-        if i == 0:
-            weights = _calculate_weights_carer(labels)
+    for split in range(3):
+        split_df = df[df["split"] == split]
+        features = split_df.iloc[:, 0]
+        labels = split_df.iloc[:, 1]
 
         ds = tf.data.Dataset.from_tensor_slices((features.values, labels.values))
         ds = ds.batch(batch_size, drop_remainder=True).prefetch(tf.data.AUTOTUNE)
         datasets.append(ds)
 
-    return datasets, weights
+    return datasets
 
 
 def _calculate_weights_goemotions(labels):
@@ -70,7 +64,6 @@ def load_goemotions(batch_size):
 
 
 if __name__ == "__main__":
-    (train_ds, test_ds, val_ds), weights = load_carer(128)
+    train_ds, test_ds, val_ds = load_carer(512)
     print(len(train_ds), len(test_ds), len(val_ds))
-    print(len(train_ds) * 128)
-    print(weights)
+    print(len(train_ds) * 512)
