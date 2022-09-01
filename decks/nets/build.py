@@ -8,7 +8,7 @@ def calculate_hidden_nodes(N, m):
     p1 = ((m + 2) * N) ** 0.5
     p2 = 2 * ((N / (m + 2)) ** 0.5)
     p3 = m * ((N / (m + 2)) ** 0.5)
-    return round((p1 + p2)), round(p3)
+    return round((p1 + p2) * 0.75), round(p3 * 0.75)
 
 
 def build_net(ds):
