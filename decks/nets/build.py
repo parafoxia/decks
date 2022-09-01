@@ -1,27 +1,44 @@
 import tensorflow as tf
 
+from decks.nets import metrics
 from decks.nets.utils import text_encoder
 
 
+def calculate_hidden_nodes(N, m):
+    p1 = ((m + 2) * N) ** 0.5
+    p2 = 2 * ((N / (m + 2)) ** 0.5)
+    p3 = m * ((N / (m + 2)) ** 0.5)
+    return round((p1 + p2)), round(p3)
+
+
 def build_net(ds):
-    enc = text_encoder(ds, 2_500)
+    outputs = 6
+    h1, h2 = calculate_hidden_nodes(len(ds), outputs)
+    print(f"Using {h1}:{h2} for hidden layers")
+
+    enc = text_encoder(ds, None)
     model = tf.keras.Sequential(
         [
             enc,
             tf.keras.layers.Embedding(
                 input_dim=len(enc.get_vocabulary()),
-                output_dim=64,
+                output_dim=h1,
                 mask_zero=True,
             ),
-            tf.keras.layers.Bidirectional(tf.keras.layers.GRU(64)),
-            tf.keras.layers.Dense(64, activation="relu"),
-            tf.keras.layers.Dense(6, activation="softmax"),
+            tf.keras.layers.Bidirectional(tf.keras.layers.GRU(h1)),
+            tf.keras.layers.Dense(h2, activation="relu"),
+            tf.keras.layers.Dense(outputs, activation="softmax"),
         ]
     )
     model.compile(
         loss="sparse_categorical_crossentropy",
-        optimizer=tf.keras.optimizers.Adam(1e-4),
-        metrics=["accuracy"],
+        optimizer="adam",
+        metrics=[
+            "accuracy",
+            *[metrics.PrecisionForClass(x) for x in range(outputs)],
+            *[metrics.RecallForClass(x) for x in range(outputs)],
+            *[metrics.MccForClass(x) for x in range(outputs)],
+        ],
     )
     return model
 

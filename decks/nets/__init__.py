@@ -1,4 +1,4 @@
-__all__ = ("utils", "build_net", "build_dist_net")
+__all__ = ("metrics", "utils", "build_net", "build_dist_net")
 
-from . import utils
+from . import metrics, utils
 from .build import build_dist_net, build_net

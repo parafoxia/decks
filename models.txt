@@ -169,6 +169,11 @@ def build_net(ds):
 
     0013 + learning rate = 2e-05
 
+    0015
+    ----
+
+    0007 with new standardiser
+
     1001
     ----
 
@@ -346,3 +351,49 @@ def build_net(ds, n_samples):
         metrics=["accuracy"],
     )
     return model
+
+    2001 (90:54)
+    ------------
+
+    * Huang's theorem (100%)
+
+def build_net(ds):
+    outputs = 6
+    h1, h2 = calculate_hidden_nodes(len(ds), outputs)
+    print(f"Using {h1}:{h2} for hidden layers")
+
+    enc = text_encoder(ds, None)
+    model = tf.keras.Sequential(
+        [
+            enc,
+            tf.keras.layers.Embedding(
+                input_dim=len(enc.get_vocabulary()),
+                output_dim=h1,
+                mask_zero=True,
+            ),
+            tf.keras.layers.Bidirectional(tf.keras.layers.GRU(h1)),
+            tf.keras.layers.Dense(h2, activation="relu"),
+            tf.keras.layers.Dense(outputs, activation="softmax"),
+        ]
+    )
+    model.compile(
+        loss="sparse_categorical_crossentropy",
+        optimizer="adam",
+        metrics=[
+            "accuracy",
+            *[metrics.PrecisionForClass(x) for x in range(outputs)],
+            *[metrics.RecallForClass(x) for x in range(outputs)],
+            *[metrics.MccForClass(x) for x in range(outputs)],
+        ],
+    )
+    return model
+
+    2002 (67:40)
+    ------------
+
+    2001 w/ Huang's theorem (75%)
+
+    2003 (45:27)
+    ------------
+
+    2001 w/ Huang's theorem (50%)
