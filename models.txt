@@ -404,6 +404,11 @@ def build_net(ds):
 
 * 2003 w/ learning rate = 1e-4
 
+    2005 (45:27)
+    ------------
+
+* 2003 w/ dropout @ 0.5
+
 
 
     Experiments
