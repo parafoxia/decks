@@ -84,3 +84,25 @@ class MccForClass(base_metric.MeanMetricWrapper):
     @dtensor_utils.inject_mesh
     def __init__(self, class_no, name="mcc", dtype=None):
         super().__init__(mcc(class_no), f"{name}_{class_no}", dtype=dtype)
+
+
+def f1(class_no):
+    def wrapper(y_true, y_pred):
+        # Get precision and recall.
+        p = precision(class_no)(y_true, y_pred)
+        r = recall(class_no)(y_true, y_pred)
+        total = p + r
+
+        # Return result. This contains a fallback to set F1 to 0 rather
+        # than NaN if the precision and the recall are both 0.
+        if tf.cond(total == 0, lambda: True, lambda: False):
+            return tf.constant(0., dtype=tf.float64)
+        return (2 * p * r) / (p + r)
+
+    return wrapper
+
+
+class F1ForClass(base_metric.MeanMetricWrapper):
+    @dtensor_utils.inject_mesh
+    def __init__(self, class_no, name="f1", dtype=None):
+        super().__init__(f1(class_no), f"{name}_{class_no}", dtype=dtype)
