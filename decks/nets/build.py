@@ -25,14 +25,15 @@ def build_net(ds):
                 output_dim=h1,
                 mask_zero=True,
             ),
-            tf.keras.layers.Bidirectional(tf.keras.layers.GRU(h1)),
+            tf.keras.layers.Bidirectional(tf.keras.layers.GRU(h1, dropout=0.5)),
+            tf.keras.layers.Dropout(0.5),
             tf.keras.layers.Dense(h2, activation="relu"),
             tf.keras.layers.Dense(outputs, activation="softmax"),
         ]
     )
     model.compile(
         loss="sparse_categorical_crossentropy",
-        optimizer=tf.keras.optimizers.Adam(1e-4),
+        optimizer="adam",
         metrics=[
             "accuracy",
             *[metrics.PrecisionForClass(x) for x in range(outputs)],
