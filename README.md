@@ -11,13 +11,13 @@ The Dimensional Emotion-Contextualising Kinetic System.
 Clone this repo, then build the Docker image:
 
 ```sh
-docker build -t decks .
+docker build -t decks:<gen> .
 ```
 
 To train models:
 
 ```sh
-docker run --gpus <devices> --ipc=host -it decks python -m decks <gen> <-e epochs> [-b batch_size] [-i epoch]
+docker run --gpus <devices> --ipc=host -it decks:<gen> python -m decks <gen> <-e epochs> [-b batch_size] [-i epoch]
 ```
 
 Arguments:
