@@ -355,7 +355,7 @@ def build_net(ds, n_samples):
     2001 (90:54)
     ------------
 
-    * Huang's theorem (100%)
+* Huang's theorem (100%)
 
 def build_net(ds):
     outputs = 6
@@ -391,9 +391,30 @@ def build_net(ds):
     2002 (67:40)
     ------------
 
-    2001 w/ Huang's theorem (75%)
+* 2001 w/ Huang's theorem (75%)
 
     2003 (45:27)
     ------------
 
-    2001 w/ Huang's theorem (50%)
+* 2001 w/ Huang's theorem (50%)
+* 100 & 200 epoch variants
+
+    2004 (45:27)
+    ------------
+
+* 2003 w/ learning rate = 1e-4
+
+
+
+    Experiments
+    -----------
+
+Model (64:64)
+Model (L1:L2)
+Model with learning rate 0.001
+Model + SGD
+Model + dropout
+
+Batch size = 512
+Epochs = 100
+New standardiser
