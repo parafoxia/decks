@@ -1,5 +1,6 @@
 ### Custom ###
 dev/
+data/checkpoints/
 data/test/
 test*.py
 test*.ipynb
