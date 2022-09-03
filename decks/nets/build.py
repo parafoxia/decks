@@ -33,11 +33,7 @@ def build_net(ds):
     )
     model.compile(
         loss="sparse_categorical_crossentropy",
-        optimizer=tf.keras.optimizers.SGD(
-            0.001,  # Change from default, match Adam default
-            momentum=0.9,  # Ruder (2016)
-            nesterov=True,
-        ),
+        optimizer="adam",
         metrics=[
             "accuracy",
             *[metrics.PrecisionForClass(x) for x in range(outputs)],
