@@ -418,6 +418,18 @@ def build_net(ds):
     ------------
 
 * 2005 w/ SGD optimiser, Nesterov momentum @ 0.9
+* 50 and 100 epoch variants
+* TODO: 150 epoch variant
+
+    2007R (45:27)
+    -------------
+
+* 2007 w/ double RNN
+
+    2005R (45:27)
+    -------------
+
+* 2005 w/ double RNN
 
 
 
