@@ -8,7 +8,7 @@ def calculate_hidden_nodes(N, m):
     p1 = ((m + 2) * N) ** 0.5
     p2 = 2 * ((N / (m + 2)) ** 0.5)
     p3 = m * ((N / (m + 2)) ** 0.5)
-    return round((p1 + p2) * 0.5), round(p3 * 0.5)
+    return round((p1 + p2) * 0.75), round(p3 * 0.75)
 
 
 def build_net(ds):
@@ -43,31 +43,6 @@ def build_net(ds):
         ],
     )
     return model
-
-
-# def build_net(ds):
-#     hl1, hl2, outputs = calculate_nodes_for(ds)
-#     enc = text_encoder(ds, None)
-#     model = tf.keras.Sequential(
-#         [
-#             enc,
-#             tf.keras.layers.Embedding(
-#                 input_dim=len(enc.get_vocabulary()),
-#                 output_dim=hl1,
-#                 mask_zero=True,
-#             ),
-#             tf.keras.layers.Bidirectional(tf.keras.layers.GRU(hl1)),
-#             tf.keras.layers.Dense(hl2, activation="relu"),
-#             tf.keras.layers.Dense(outputs, activation="sigmoid"),
-#         ]
-#     )
-#     model.compile(
-#         loss="binary_crossentropy",
-#         # optimizer=tf.keras.optimizers.Adam(1e-4),
-#         optimizer="adam",
-#         metrics=["accuracy"],
-#     )
-#     return model
 
 
 def build_dist_net(ds, strategy):
