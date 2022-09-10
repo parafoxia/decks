@@ -1,4 +1,5 @@
 import tensorflow as tf
+import tensorflow_addons as tfa
 
 from decks.nets import metrics
 from decks.nets.utils import text_encoder
@@ -28,7 +29,7 @@ def build_net(ds):
             tf.keras.layers.Bidirectional(tf.keras.layers.GRU(h1, dropout=0.5)),
             tf.keras.layers.Dropout(0.5),
             tf.keras.layers.Dense(h2),
-            tf.keras.layers.LeakyReLU(alpha=0.01),
+            tfa.layers.Maxout(5),
             tf.keras.layers.Dense(outputs, activation="softmax"),
         ]
     )
