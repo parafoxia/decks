@@ -1,25 +1,29 @@
-from pydoc import describe
 import tensorflow as tf
 
 import decks
 from decks import data
 
 
-def _load_net(id):
-    (train_ds, _, _), _ = data.load_carer(int(id.split("-")[-1]))
-    net = decks.build_net(train_ds)
-    weights = tf.train.latest_checkpoint(decks.DATA_DIR / f"checkpoints/{id}")
-    net.load_weights(weights)
+def _load_net():
+    # Loads C6-10 classifier.
+    ds, _, _ = data.load_carer(512)
+    net = decks.build_net(ds)
+    weights = decks.DATA_DIR / "checkpoints/2006-0100-0512/cp-0010.ckpt"
+    net.load_weights(weights).expect_partial()
+    # custom_objects = {"_standardise": _standardise}
+    # with tf.keras.utils.custom_object_scope(custom_objects):
+    #     net = tf.keras.models.load_model("DecksC6")
     return net
 
 
 class DecksNet(tf.keras.Model):
-    def __init__(self):
+    def __init__(self, alpha=0.2):
         super().__init__()
-        self.emo_net = _load_net("0002-0010-0512")
-        self.deca_layer = decks.Contextualiser()
+        self.emotion = _load_net()
+        self.context = decks.Contextualiser(alpha=alpha)
 
     def call(self, inputs):
-        x = self.emo_net(inputs)
-        x = self.deca_layer(x)
+        x = self.emotion(inputs)
+        print(x)
+        x = self.context(x)
         return x
