@@ -39,3 +39,8 @@ Arguments:
 | Use all GPUs     | `--gpus all`            |
 
 **Note:** If more than one GPU device is made available, distributed training is automatically enabled.
+
+## Evaluating DECKS
+
+Several notebooks have been provided in the `notebooks` directory.
+These will need to moved to the root directory to run.
